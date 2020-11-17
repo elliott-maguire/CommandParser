@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="cs350-project">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/vendor/cs350-project-v01.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
