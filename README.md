@@ -10,9 +10,8 @@ configurations can be added.
 ## Workflow
 **Please review these before starting! These things are in place to make our process smoother and easier.**
 
-Requirements, patches, and any other work on the code itself should always happen in branches.
-Name your branches according to the requirements you are addressing with the syntax of 
-"requirement" + the requirement number, e.g. `requirement-1`.
+Branches are for command groupings, commits are for requirements. E.g. branch name `stock-parser` with commits of
+"add box parser (#28)" where 28 is the requirement number.
 
 If there is a bug or something needs to be refactored, create an issue and then name the branch
 according to that issue, e.g if I create an issue with the ID of 15, I'd name my branch `issue-15`.
