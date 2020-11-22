@@ -32,5 +32,13 @@ public class ParserSysEnv {
         myParserHelper.getActionProcessor().schedule(command);
     }
 
+    // CLOSE VIEW id
+    public void ParseCloseView(String input) {
+        String[] words = input.split(" ");
+
+        A_Command command = new CommandMetaViewDestroy(words[2]);
+        myParserHelper.getActionProcessor().schedule(command);
+    }
+
 
 }
