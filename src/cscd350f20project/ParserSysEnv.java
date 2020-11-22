@@ -46,5 +46,13 @@ public class ParserSysEnv {
         myParserHelper.getActionProcessor().schedule(command);
     }
 
+    // COUPLE STOCK id1 AND id2
+    public void ParseCoupleStock(String input) {
+        String[] words = input.split(" ");
+
+        A_Command command = new CommandStructuralCouple(words[2], words[4]);
+        myParserHelper.getActionProcessor().schedule(command);
+    }
+
 
 }
