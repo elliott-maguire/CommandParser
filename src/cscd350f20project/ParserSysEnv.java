@@ -40,5 +40,11 @@ public class ParserSysEnv {
         myParserHelper.getActionProcessor().schedule(command);
     }
 
+    // COMMIT
+    public void ParseCommit(String input) {
+        A_Command command = new CommandStructuralCommit();
+        myParserHelper.getActionProcessor().schedule(command);
+    }
+
 
 }
