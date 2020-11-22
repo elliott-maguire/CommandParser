@@ -54,5 +54,11 @@ public class ParserSysEnv {
         myParserHelper.getActionProcessor().schedule(command);
     }
 
+    // UNCOUPLE STOCK id1 and id2
+    public void ParseUncoupleStock(String input) {
+        String[] words = input.split(" ");
 
+        A_Command command = new CommandStructuralUncouple(words[2], words[4]);
+        myParserHelper.getActionProcessor().schedule(command);
+    }
 }
