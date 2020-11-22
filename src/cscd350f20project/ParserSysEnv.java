@@ -18,5 +18,11 @@ public class ParserSysEnv {
         this.myParserHelper = myParserHelper;
     }
 
+    // @EXIT
+    public void ParseExit(String input) {
+        A_Command command = new CommandMetaDoExit();
+        myParserHelper.getActionProcessor().schedule(command);
+    }
+
 
 }
