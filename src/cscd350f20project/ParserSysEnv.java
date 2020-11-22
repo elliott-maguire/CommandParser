@@ -24,5 +24,13 @@ public class ParserSysEnv {
         myParserHelper.getActionProcessor().schedule(command);
     }
 
+    // @RUN string
+    public void ParseRun(String input) {
+        String[] words = input.split(" ");
+
+        A_Command command = new CommandMetaDoRun(words[1]);
+        myParserHelper.getActionProcessor().schedule(command);
+    }
+
 
 }
