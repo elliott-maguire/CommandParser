@@ -2,6 +2,7 @@ package cscd350f20project;
 
 import cs350f20project.controller.cli.parser.MyParserHelper;
 import cs350f20project.controller.command.A_Command;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.meta.CommandMetaDoRun;
 import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
@@ -65,7 +66,6 @@ public class ParserSysEnv {
     }
 
     // OPEN VIEW id1 ORIGIN ( coordinates_world | ( '$' id2 ) ) WORLD WIDTH integer1 SCREEN WIDTH integer2 HEIGHT integer3
-    // Parameters are id1, coordinates_world (or a ref), integer1, integer2, integer3
     public void ParseOpenView(String input) {
         String[] words = input.split(" ");
 
@@ -96,5 +96,27 @@ public class ParserSysEnv {
 
         A_Command command = new CommandMetaViewGenerate(viewID, origin, widthWorld, screen);
         myParserHelper.getActionProcessor().schedule(command);
+    }
+
+    // USE id AS REFERENCE coordinates_world
+    public void ParseUseIDAsReference(String input) {
+        String[] words = input.split(" ");
+
+        String id = words[1];
+        String coordsIn = words[4];
+
+        Longitude longitude;
+        Latitude latitude;
+
+        String[] coordsSplit = coordsIn.split("//");
+        String[] latSplit = coordsSplit[0].split("/*|'|"+'"');
+        String[] lonSplit = coordsSplit[1].split("/*|'|"+'"');
+
+        latitude = new Latitude(Integer.parseInt(latSplit[0]), Integer.parseInt(latSplit[1]), Integer.parseInt(latSplit[2]));
+        longitude = new Longitude(Integer.parseInt(lonSplit[0]), Integer.parseInt(lonSplit[1]), Integer.parseInt(lonSplit[2]));
+
+        CoordinatesWorld coords = new CoordinatesWorld(latitude, longitude);
+
+        myParserHelper.addReference(id, coords);
     }
 }
