@@ -5,14 +5,16 @@ import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.meta.CommandMetaDoRun;
 import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
+import cs350f20project.controller.command.meta.CommandMetaViewGenerate;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
 import cs350f20project.controller.command.structural.CommandStructuralUncouple;
+import cs350f20project.datatype.*;
 
 import javax.swing.text.html.parser.Parser;
 
 public class ParserSysEnv {
-    private MyParserHelper myParserHelper;
+    private final MyParserHelper myParserHelper;
 
     public ParserSysEnv(MyParserHelper myParserHelper) {
         this.myParserHelper = myParserHelper;
@@ -59,6 +61,40 @@ public class ParserSysEnv {
         String[] words = input.split(" ");
 
         A_Command command = new CommandStructuralUncouple(words[2], words[4]);
+        myParserHelper.getActionProcessor().schedule(command);
+    }
+
+    // OPEN VIEW id1 ORIGIN ( coordinates_world | ( '$' id2 ) ) WORLD WIDTH integer1 SCREEN WIDTH integer2 HEIGHT integer3
+    // Parameters are id1, coordinates_world (or a ref), integer1, integer2, integer3
+    public void ParseOpenView(String input) {
+        String[] words = input.split(" ");
+
+        String viewID = words[2];
+        String coordsIn = words[4];
+        int widthWorld = Integer.parseInt(words[7]);
+        int widthScreen = Integer.parseInt(words[10]);
+        int heightScreen = Integer.parseInt(words[12]);
+
+        CoordinatesWorld origin;
+        if (coordsIn.contains("$")) {
+            origin = myParserHelper.getReference(coordsIn);
+        } else {
+            Longitude longitude;
+            Latitude latitude;
+
+            String[] coordsSplit = coordsIn.split("//");
+            String[] latSplit = coordsSplit[0].split("/*|'|"+'"');
+            String[] lonSplit = coordsSplit[1].split("/*|'|"+'"');
+
+            latitude = new Latitude(Integer.parseInt(latSplit[0]), Integer.parseInt(latSplit[1]), Integer.parseInt(latSplit[2]));
+            longitude = new Longitude(Integer.parseInt(lonSplit[0]), Integer.parseInt(lonSplit[1]), Integer.parseInt(lonSplit[2]));
+
+            origin = new CoordinatesWorld(latitude, longitude);
+        }
+
+        CoordinatesScreen screen = new CoordinatesScreen(widthScreen, heightScreen);
+
+        A_Command command = new CommandMetaViewGenerate(viewID, origin, widthWorld, screen);
         myParserHelper.getActionProcessor().schedule(command);
     }
 }
