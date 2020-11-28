@@ -1,5 +1,6 @@
 package cscd350f20project;
 
+import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.cli.parser.MyParserHelper;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
@@ -9,6 +10,7 @@ import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
 import cs350f20project.controller.command.meta.CommandMetaViewGenerate;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
+import cs350f20project.controller.command.structural.CommandStructuralLocate;
 import cs350f20project.controller.command.structural.CommandStructuralUncouple;
 import cs350f20project.datatype.*;
 
@@ -62,6 +64,21 @@ public class ParserSysEnv {
         String[] words = input.split(" ");
 
         A_Command command = new CommandStructuralUncouple(words[2], words[4]);
+        myParserHelper.getActionProcessor().schedule(command);
+    }
+
+    // LOCATE STOCK id1 ON TRACK id2 DISTANCE number FROM ( START | END )
+    public void ParseLocateStock(String input) {
+        String[] words = input.split(" ");
+
+        String stockID = words[2];
+        String trackID = words[5];
+        double distance = Double.parseDouble(words[8]);
+        boolean from = words[10].equals("START");
+
+        TrackLocator locator = new TrackLocator(trackID, distance, from);
+
+        A_Command command = new CommandStructuralLocate(stockID, locator);
         myParserHelper.getActionProcessor().schedule(command);
     }
 
