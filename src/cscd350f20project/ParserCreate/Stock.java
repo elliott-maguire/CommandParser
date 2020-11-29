@@ -1,13 +1,9 @@
 package cscd350f20project.ParserCreate;
 
+import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.cli.parser.MyParserHelper;
 import cs350f20project.controller.command.A_Command;
-import cs350f20project.controller.command.creational.CommandCreateStockCarBox;
-import cs350f20project.controller.command.creational.CommandCreateStockCarCaboose;
-import cs350f20project.controller.command.creational.CommandCreateStockCarFlatbed;
-import cs350f20project.controller.command.creational.CommandCreateStockCarPassenger;
-import cs350f20project.controller.command.creational.CommandCreateStockCarTank;
-import cs350f20project.controller.command.creational.CommandCreateStockCarTender;
+import cs350f20project.controller.command.creational.*;
 
 import java.lang.reflect.Array;
 
@@ -54,7 +50,29 @@ public class Stock {
                 c = new CommandCreateStockCarTender(id);
                 myParserHelper.getActionProcessor().schedule(c);
             }
+
+            case "diesel"  -> this.createDieselEngine(command);
             
         }
+
+    }
+
+    private void createDieselEngine(String command) {
+        String[] words = command.split(" ");
+        String id1 = words[3];
+        String id2 = words[8];
+        double distance = Double.parseDouble(words[10]);
+        boolean fromStartOrEnd;
+        boolean facingStartOrEnd;
+
+        A_Command c;
+
+        fromStartOrEnd = ("start" == words[12].toLowerCase());
+
+        facingStartOrEnd = ("start" == words[14].toLowerCase());
+
+        c = new CommandCreateStockEngineDiesel(id1, new TrackLocator(id2, distance, fromStartOrEnd), facingStartOrEnd);
+
+        myParserHelper.getActionProcessor().schedule(c);
     }
 }
