@@ -3,7 +3,6 @@ package cscd350f20project;
 import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.cli.parser.MyParserHelper;
 import cs350f20project.controller.command.A_Command;
-import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.meta.CommandMetaDoRun;
 import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
@@ -13,8 +12,6 @@ import cs350f20project.controller.command.structural.CommandStructuralCouple;
 import cs350f20project.controller.command.structural.CommandStructuralLocate;
 import cs350f20project.controller.command.structural.CommandStructuralUncouple;
 import cs350f20project.datatype.*;
-
-import javax.swing.text.html.parser.Parser;
 
 public class ParserSysEnv {
     private final MyParserHelper myParserHelper;
@@ -82,7 +79,8 @@ public class ParserSysEnv {
         myParserHelper.getActionProcessor().schedule(command);
     }
 
-    // OPEN VIEW id1 ORIGIN ( coordinates_world | ( '$' id2 ) ) WORLD WIDTH integer1 SCREEN WIDTH integer2 HEIGHT integer3
+    // OPEN VIEW id1 ORIGIN ( coordinates_world | ( '$' id2 ) ) WORLD WIDTH integer1
+    // SCREEN WIDTH integer2 HEIGHT integer3
     public void ParseOpenView(String input) {
         String[] words = input.split(" ");
 
@@ -100,11 +98,13 @@ public class ParserSysEnv {
             Latitude latitude;
 
             String[] coordsSplit = coordsIn.split("//");
-            String[] latSplit = coordsSplit[0].split("/*|'|"+'"');
-            String[] lonSplit = coordsSplit[1].split("/*|'|"+'"');
+            String[] latSplit = coordsSplit[0].split("/*|'|" + '"');
+            String[] lonSplit = coordsSplit[1].split("/*|'|" + '"');
 
-            latitude = new Latitude(Integer.parseInt(latSplit[0]), Integer.parseInt(latSplit[1]), Integer.parseInt(latSplit[2]));
-            longitude = new Longitude(Integer.parseInt(lonSplit[0]), Integer.parseInt(lonSplit[1]), Integer.parseInt(lonSplit[2]));
+            latitude = new Latitude(Integer.parseInt(latSplit[0]), Integer.parseInt(latSplit[1]),
+                    Integer.parseInt(latSplit[2]));
+            longitude = new Longitude(Integer.parseInt(lonSplit[0]), Integer.parseInt(lonSplit[1]),
+                    Integer.parseInt(lonSplit[2]));
 
             origin = new CoordinatesWorld(latitude, longitude);
         }
@@ -126,11 +126,13 @@ public class ParserSysEnv {
         Latitude latitude;
 
         String[] coordsSplit = coordsIn.split("//");
-        String[] latSplit = coordsSplit[0].split("/*|'|"+'"');
-        String[] lonSplit = coordsSplit[1].split("/*|'|"+'"');
+        String[] latSplit = coordsSplit[0].split("/*|'|" + '"');
+        String[] lonSplit = coordsSplit[1].split("/*|'|" + '"');
 
-        latitude = new Latitude(Integer.parseInt(latSplit[0]), Integer.parseInt(latSplit[1]), Integer.parseInt(latSplit[2]));
-        longitude = new Longitude(Integer.parseInt(lonSplit[0]), Integer.parseInt(lonSplit[1]), Integer.parseInt(lonSplit[2]));
+        latitude = new Latitude(Integer.parseInt(latSplit[0]), Integer.parseInt(latSplit[1]),
+                Integer.parseInt(latSplit[2]));
+        longitude = new Longitude(Integer.parseInt(lonSplit[0]), Integer.parseInt(lonSplit[1]),
+                Integer.parseInt(lonSplit[2]));
 
         CoordinatesWorld coords = new CoordinatesWorld(latitude, longitude);
 
