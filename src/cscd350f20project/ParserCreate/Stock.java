@@ -5,8 +5,6 @@ import cs350f20project.controller.cli.parser.MyParserHelper;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.creational.*;
 
-import java.lang.reflect.Array;
-
 public class Stock {
     private MyParserHelper myParserHelper;
 
@@ -51,8 +49,8 @@ public class Stock {
                 myParserHelper.getActionProcessor().schedule(c);
             }
 
-            case "diesel"  -> this.createDieselEngine(command);
-            
+            case "diesel" -> this.createDieselEngine(command);
+
         }
 
     }
