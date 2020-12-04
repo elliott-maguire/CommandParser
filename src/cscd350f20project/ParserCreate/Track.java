@@ -45,6 +45,10 @@ public class Track {
             case "roundhouse" -> {
                 handleRoundhouse(words);
             }
+
+            case "straight" -> {
+                handleTrackStraight(words);
+            }
         }
     }
 
@@ -221,6 +225,31 @@ public class Track {
 
         A_Command c = new CommandCreateTrackRoundhouse(id1, coordinatesWorld, coordinatesDelta1, angle1, angle2, angle3,
                 spurs, length1, length2);
+        this.myHelper.getActionProcessor().schedule(c);
+    }
+
+    // CREATE TRACK STRAIGHT id1 REFERENCE ( coordinates_world | ( '$' id2 ) )
+    // DELTA START coordinates_delta1 END coordinates_delta2
+    private void handleTrackStraight(String[] command) {
+        String id1 = command[3];
+
+        CoordinatesWorld coordinatesWorld;
+        if (command[5].contains("$")) {
+            coordinatesWorld = myHelper.getReference(command[5]);
+        } else {
+            coordinatesWorld = handleWorldCoord(command[5]);
+        }
+
+        String[] deltaStart = command[8].split(":");
+        String[] deltaEnd = command[10].split(":");
+        CoordinatesDelta startDelta = new CoordinatesDelta(Double.parseDouble(deltaStart[0]),
+                Double.parseDouble(deltaStart[1]));
+        CoordinatesDelta endDelta = new CoordinatesDelta(Double.parseDouble(deltaEnd[0]),
+                Double.parseDouble(deltaEnd[1]));
+
+        PointLocator pointLocator = new PointLocator(coordinatesWorld, startDelta, endDelta);
+
+        A_Command c = new CommandCreateTrackStraight(id1, pointLocator);
         this.myHelper.getActionProcessor().schedule(c);
     }
 
