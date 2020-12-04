@@ -6,14 +6,42 @@ import cs350f20project.controller.command.PointLocator;
 import cs350f20project.controller.command.creational.*;
 import cs350f20project.datatype.*;
 
-import java.util.ArrayList;
-
 public class Track {
 
     MyParserHelper myHelper;
 
     public Track(MyParserHelper myHelper) {
         this.myHelper = myHelper;
+    }
+
+    public void process(String command) {
+        String[] words = command.split(" ");
+
+        switch (words[2].toLowerCase()) {
+            case "drawbridge" -> {
+                handleDrawBridge(words);
+            }
+
+            case "bridge" -> {
+                handleBridge(words);
+            }
+
+            case "crossing" -> {
+                handleCrossing(words);
+            }
+
+            case "curve" -> {
+                handleCurved(words);
+            }
+
+            case "end" -> {
+                handleTrackEnd(words);
+            }
+
+            case "crossover" -> {
+                handleCrossover(words);
+            }
+        }
     }
 
     private void handleDrawBridge(String[] command) {
@@ -161,7 +189,35 @@ public class Track {
         pointLocator = new PointLocator(worldC, startDelta, endDelta);
         A_Command c = new CommandCreateTrackEnd(id, pointLocator);
         this.myHelper.getActionProcessor().schedule(c);
+    }
 
+    // CREATE TRACK ROUNDHOUSE id1 REFERENCE ( coordinates_world | ( '$' id2 ) )
+    // DELTA ORIGIN coordinates_delta1 ANGLE ENTRY angle START angle2 END angle3
+    // WITH integer SPURS LENGTH number1 TURNTABLE LENGTH number2
+    private void handleRoundhouse(String[] command) {
+        String id1 = command[3];
+
+        CoordinatesWorld coordinatesWorld;
+        if (command[5].contains("$")) {
+            coordinatesWorld = myHelper.getReference(command[5]);
+        } else {
+            coordinatesWorld = handleWorldCoord(command[5]);
+        }
+
+        CoordinatesDelta coordinatesDelta1 = new CoordinatesDelta(Integer.parseInt(command[8].split(":")[0]),
+                Integer.parseInt(command[8].split(":")[1]));
+
+        Angle angle1 = new Angle(Double.parseDouble(command[11]));
+        Angle angle2 = new Angle(Double.parseDouble(command[13]));
+        Angle angle3 = new Angle(Double.parseDouble(command[15]));
+
+        int spurs = Integer.parseInt(command[17]);
+        double length1 = Double.parseDouble(command[20]);
+        double length2 = Double.parseDouble(command[23]);
+
+        A_Command c = new CommandCreateTrackRoundhouse(id1, coordinatesWorld, coordinatesDelta1, angle1, angle2, angle3,
+                spurs, length1, length2);
+        this.myHelper.getActionProcessor().schedule(c);
     }
 
     private CoordinatesWorld handleWorldCoord(String coordIn) {

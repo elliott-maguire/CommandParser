@@ -45,7 +45,7 @@ public class Power {
     }
 
     private void handleCatenary(String[] Command) {
-        ArrayList catenary = new ArrayList();
+        ArrayList<String> catenary = new ArrayList<>();
         for (int x = 6; x < Command.length; x++)
             catenary.add(Command[x]);
 
@@ -60,7 +60,7 @@ public class Power {
         String[] delta = command[7].split(":");
         CoordinatesDelta coordinatesDelta = new CoordinatesDelta(Double.parseDouble(delta[0]),
                 Double.parseDouble(delta[1]));
-        ArrayList catenary = new ArrayList();
+        ArrayList<String> catenary = new ArrayList<>();
 
         for (int x = 10; x < command.length; x++) {
             catenary.add(command[x]);
@@ -81,7 +81,7 @@ public class Power {
         String[] delta = command[7].split(":");
         CoordinatesDelta coordinatesDelta = new CoordinatesDelta(Double.parseDouble(delta[0]),
                 Double.parseDouble(delta[1]));
-        ArrayList substations = new ArrayList();
+        ArrayList<String> substations = new ArrayList<>();
 
         for (int x = 10; x < command.length; x++) {
             substations.add(command[x]);
