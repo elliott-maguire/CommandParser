@@ -12,6 +12,14 @@ public class Stock {
         this.myParserHelper = myParserHelper;
     }
 
+    public void process(String command) {
+        if (command.startsWith("create stock")) {
+            ParseCreate(command);
+        } else {
+            createDieselEngine(command);
+        }
+    }
+
     public void ParseCreate(String command) {
         String[] words = command.split(" ");
         String id = words[3];
