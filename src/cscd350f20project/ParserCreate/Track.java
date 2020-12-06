@@ -165,7 +165,6 @@ public class Track {
                 Double.parseDouble(deltaStart[1]));
         CoordinatesDelta endDelta = new CoordinatesDelta(Double.parseDouble(deltaEnd[0]),
                 Double.parseDouble(deltaEnd[1]));
-        PointLocator pointLocator;
         A_Command c;
 
         if (command[5].charAt(0) == '$') {
