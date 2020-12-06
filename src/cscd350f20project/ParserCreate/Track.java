@@ -49,9 +49,15 @@ public class Track {
             case "straight" -> {
                 handleTrackStraight(words);
             }
+        }
 
+        switch (words[3].toLowerCase()) {
             case "switch" -> {
                 handleTrackSwitchTurnout(words);
+            }
+
+            case "wye" -> {
+                handleTrackSwitchWye(words);
             }
         }
     }
@@ -289,6 +295,45 @@ public class Track {
         CoordinatesDelta delta = ShapeArc.calculateDeltaOrigin(coordinatesWorld, startDelta1, endDelta1, distance);
         A_Command c = new CommandCreateTrackSwitchTurnout(id1, coordinatesWorld, startDelta1, endDelta1, startDelta2,
                 endDelta2, delta);
+        this.myHelper.getActionProcessor().schedule(c);
+    }
+
+    // CREATE TRACK SWITCH WYE id1 REFERENCE ( coordinates_world | ( '$' id2 ) )
+    // DELTA START coordinates_delta1 END coordinates_delta2
+    // DISTANCE ORIGIN number1 DELTA START coordinates_delta3 END coordinates_delta4
+    // DISTANCE ORIGIN number2
+    private void handleTrackSwitchWye(String[] command) {
+        String id1 = command[4];
+
+        CoordinatesWorld coordinatesWorld;
+        if (command[6].contains("$")) {
+            coordinatesWorld = myHelper.getReference(command[6]);
+        } else {
+            coordinatesWorld = handleWorldCoord(command[6]);
+        }
+
+        String[] deltaStart1 = command[9].split(":");
+        String[] deltaEnd1 = command[11].split(":");
+        CoordinatesDelta startDelta1 = new CoordinatesDelta(Double.parseDouble(deltaStart1[0]),
+                Double.parseDouble(deltaStart1[1]));
+        CoordinatesDelta endDelta1 = new CoordinatesDelta(Double.parseDouble(deltaEnd1[0]),
+                Double.parseDouble(deltaEnd1[1]));
+
+        String[] deltaStart2 = command[17].split(":");
+        String[] deltaEnd2 = command[19].split(":");
+        CoordinatesDelta startDelta2 = new CoordinatesDelta(Double.parseDouble(deltaStart2[0]),
+                Double.parseDouble(deltaStart2[1]));
+        CoordinatesDelta endDelta2 = new CoordinatesDelta(Double.parseDouble(deltaEnd2[0]),
+                Double.parseDouble(deltaEnd2[1]));
+
+        Double distance1 = Double.parseDouble(command[14]);
+        Double distance2 = Double.parseDouble(command[22]);
+
+        CoordinatesDelta delta1 = ShapeArc.calculateDeltaOrigin(coordinatesWorld, startDelta1, endDelta1, distance1);
+        CoordinatesDelta delta2 = ShapeArc.calculateDeltaOrigin(coordinatesWorld, startDelta1, endDelta1, distance2);
+
+        A_Command c = new CommandCreateTrackSwitchWye(id1, coordinatesWorld, startDelta1, endDelta1, delta1,
+                startDelta2, endDelta2, delta2);
         this.myHelper.getActionProcessor().schedule(c);
     }
 
