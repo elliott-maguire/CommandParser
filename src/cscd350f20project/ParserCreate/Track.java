@@ -49,6 +49,10 @@ public class Track {
             case "straight" -> {
                 handleTrackStraight(words);
             }
+
+            case "switch" -> {
+                handleTrackSwitchTurnout(words);
+            }
         }
     }
 
@@ -250,6 +254,41 @@ public class Track {
         PointLocator pointLocator = new PointLocator(coordinatesWorld, startDelta, endDelta);
 
         A_Command c = new CommandCreateTrackStraight(id1, pointLocator);
+        this.myHelper.getActionProcessor().schedule(c);
+    }
+
+    // CREATE TRACK SWITCH TURNOUT id1 REFERENCE ( coordinates_world | ( '$' id2 ) )
+    // STRAIGHT DELTA START coordinates_delta1 END coordinates_delta2 CURVE DELTA
+    // START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number
+    private void handleTrackSwitchTurnout(String[] command) {
+        String id1 = command[4];
+
+        CoordinatesWorld coordinatesWorld;
+        if (command[6].contains("$")) {
+            coordinatesWorld = myHelper.getReference(command[6]);
+        } else {
+            coordinatesWorld = handleWorldCoord(command[6]);
+        }
+
+        String[] deltaStart1 = command[10].split(":");
+        String[] deltaEnd1 = command[12].split(":");
+        CoordinatesDelta startDelta1 = new CoordinatesDelta(Double.parseDouble(deltaStart1[0]),
+                Double.parseDouble(deltaStart1[1]));
+        CoordinatesDelta endDelta1 = new CoordinatesDelta(Double.parseDouble(deltaEnd1[0]),
+                Double.parseDouble(deltaEnd1[1]));
+
+        String[] deltaStart2 = command[14].split(":");
+        String[] deltaEnd2 = command[16].split(":");
+        CoordinatesDelta startDelta2 = new CoordinatesDelta(Double.parseDouble(deltaStart2[0]),
+                Double.parseDouble(deltaStart2[1]));
+        CoordinatesDelta endDelta2 = new CoordinatesDelta(Double.parseDouble(deltaEnd2[0]),
+                Double.parseDouble(deltaEnd2[1]));
+
+        Double distance = Double.parseDouble(command[19]);
+
+        CoordinatesDelta delta = ShapeArc.calculateDeltaOrigin(coordinatesWorld, startDelta1, endDelta1, distance);
+        A_Command c = new CommandCreateTrackSwitchTurnout(id1, coordinatesWorld, startDelta1, endDelta1, startDelta2,
+                endDelta2, delta);
         this.myHelper.getActionProcessor().schedule(c);
     }
 
