@@ -20,6 +20,28 @@ public class ParserSysEnv {
         this.myParserHelper = myParserHelper;
     }
 
+    public void process(String command) {
+        if (command.startsWith("@EXIT")) {
+            ParseExit(command);
+        } else if (command.startsWith("@RUN")) {
+            ParseRun(command);
+        } else if (command.startsWith("CLOSE VIEW")) {
+            ParseCloseView(command);
+        } else if (command.startsWith("OPEN VIEW")) {
+            ParseOpenView(command);
+        } else if (command.startsWith("COMMIT")) {
+            ParseCommit(command);
+        } else if (command.startsWith("COUPLE STOCK")) {
+            ParseCoupleStock(command);
+        } else if (command.startsWith("LOCATE STOCK")) {
+            ParseLocateStock(command);
+        } else if (command.startsWith("UNCOUPLE STOCK")) {
+            ParseUncoupleStock(command);
+        } else if (command.startsWith("USE")) {
+            ParseUseIDAsReference(command);
+        }
+    }
+
     // @EXIT
     public void ParseExit(String input) {
         A_Command command = new CommandMetaDoExit();
